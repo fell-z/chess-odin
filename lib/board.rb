@@ -3,7 +3,7 @@
 class Board
   COLORS = {
     bg: {
-      magenta: [187, 120, 247],
+      purple: [187, 120, 247],
       blue: [85, 85, 255]
     },
     fg: {
@@ -12,12 +12,16 @@ class Board
     }
   }.freeze
 
+  RANK = 0
+  FILE = 1
+
   def initialize
     @board = Array.new(8) { Array.new(8) }
   end
 
   def render
-    bg_color_sequence = %i[magenta blue magenta blue magenta blue magenta blue]
+    system("clear")
+    bg_color_sequence = %i[purple blue purple blue purple blue purple blue]
 
     puts "┌#{'────────' * 8}┐"
     @board.each do |rank|
@@ -28,6 +32,23 @@ class Board
       bg_color_sequence.rotate!
     end
     puts "└#{'────────' * 8}┘"
+  end
+
+  def at_position(position)
+    @board[position[RANK]][position[FILE]]
+  end
+
+  def move_piece(piece_pos, dest_pos)
+    @board[dest_pos[RANK]][dest_pos[FILE]] = @board[piece_pos[RANK]][piece_pos[FILE]]
+    @board[piece_pos[RANK]][piece_pos[FILE]] = nil
+  end
+
+  def place_piece_at(position, new_piece)
+    @board[position[RANK]][position[FILE]] = new_piece
+  end
+
+  def remove_piece_at(position)
+    @board[position[RANK]][position[FILE]] = nil
   end
 
   private
