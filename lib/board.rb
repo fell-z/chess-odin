@@ -54,21 +54,19 @@ class Board
   private
 
   def build_rank(bg_color_sequence, fg_color_sequence, rank_squares)
-    side_corner = "│"
     blank_line_squares = "        " * 8
     blank_line_color_sequence = [:white] * 8
     <<~RANK
-      #{build_line(bg_color_sequence, blank_line_color_sequence, side_corner, blank_line_squares, side_corner)}
-      #{build_line(bg_color_sequence, fg_color_sequence, side_corner, rank_squares, side_corner)}
-      #{build_line(bg_color_sequence, blank_line_color_sequence, side_corner, blank_line_squares, side_corner)}
+      │#{build_line(bg_color_sequence, blank_line_color_sequence, blank_line_squares)}│
+      │#{build_line(bg_color_sequence, fg_color_sequence, rank_squares)}│
+      │#{build_line(bg_color_sequence, blank_line_color_sequence, blank_line_squares)}│
     RANK
   end
 
-  def build_line(bg_color_sequence, fg_color_sequence, left_corner, mid_points, right_corner)
-    finished_line = bg_color_sequence.each_with_index.reduce("") do |line, (bg_color, index)|
+  def build_line(bg_color_sequence, fg_color_sequence, mid_points)
+    bg_color_sequence.each_with_index.reduce("") do |line, (bg_color, index)|
       line + colorize(mid_points[index].center(8), COLORS[:bg][bg_color], COLORS[:fg][fg_color_sequence[index]])
     end
-    left_corner + finished_line + right_corner
   end
 
   def colorize(char, background_values, foreground_values = COLORS[:fg][:white])
