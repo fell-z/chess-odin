@@ -31,7 +31,7 @@ class Pawn
       end
 
     moves.select do |move_pos|
-      (move_pos[RANK].between?(0, 7) && move_pos[FILE].between?(0, 7)) && @board.at_position(move_pos).nil?
+      move_pos.all? { |value| value.between?(0, 7) } && @board.at_position(move_pos).nil?
     end
   end
   # rubocop:enable Metrics/MethodLength
@@ -44,7 +44,7 @@ class Pawn
     captures = [
       [current_rank + (1 * @move_direction), current_file - 1],
       [current_rank + (1 * @move_direction), current_file + 1]
-    ].select { |capture_pos| capture_pos[RANK].between?(0, 7) && capture_pos[FILE].between?(0, 7) }
+    ].select { |capture_pos| capture_pos.all? { |value| value.between?(0, 7) } }
 
     captures.reject do |capture_pos|
       possible_capture = @board.at_position(capture_pos)
