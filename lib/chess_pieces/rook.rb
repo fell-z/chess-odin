@@ -34,6 +34,20 @@ class Rook
     moves
   end
 
+  def possible_captures
+    captures = []
+
+    directions.each_value do |direction|
+      squares_towards_to(direction).each do |square|
+        next if @board.at_position(square).nil?
+
+        break captures << square if @board.at_position(square).side != @side
+      end
+    end
+
+    captures
+  end
+
   def to_s
     "♜"
   end
