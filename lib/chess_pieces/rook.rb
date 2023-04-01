@@ -48,6 +48,26 @@ class Rook
     captures
   end
 
+  def move(dest_pos)
+    return :failure unless possible_moves.include?(dest_pos)
+
+    @board.move_piece(@position, dest_pos)
+    @position = dest_pos
+
+    :success
+  end
+
+  def capture(piece_pos)
+    return :failure unless possible_captures.include?(piece_pos)
+
+    @board.remove_piece_at(piece_pos)
+
+    @board.move_piece(@position, piece_pos)
+    @position = piece_pos
+
+    :success
+  end
+
   def to_s
     "♜"
   end
