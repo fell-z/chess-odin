@@ -1,1 +1,1 @@
-Dir["./chess_pieces/*.rb"].each { |file| require_relative file.sub(".rb", "") }
+Dir["./lib/chess_pieces/*.rb"].each { |file| require file.sub(".rb", "") }
