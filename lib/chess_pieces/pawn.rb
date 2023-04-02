@@ -1,21 +1,15 @@
-# Implementation of chess pawn
-class Pawn
-  RANK = 0
-  FILE = 1
+require_relative "./piece_base"
 
+# Implementation of chess pawn
+class Pawn < PieceBase
   DOWN = 1
   UP = -1
 
-  attr_reader :side, :position
-
   def initialize(board, side, position)
-    @board = board
-    @side = side
-    @position = position
+    super
+
     @move_direction = position[RANK] == 1 ? DOWN : UP
     @first_move = true
-
-    @board.place_piece_at(@position, self)
   end
 
   # rubocop:disable Metrics/MethodLength
@@ -54,27 +48,19 @@ class Pawn
   # rubocop:enable Metrics/AbcSize
 
   def move(dest_pos)
-    return :failure unless possible_moves.include?(dest_pos)
+    exit_code = super
 
-    @first_move = false
+    @first_move = false if exit_code == :success && @first_move
 
-    @board.move_piece(@position, dest_pos)
-    @position = dest_pos
-
-    :success
+    exit_code
   end
 
   def capture(piece_pos)
-    return :failure unless possible_captures.include?(piece_pos)
+    exit_code = super
 
-    @first_move = false
+    @first_move = false if exit_code == :success && @first_move
 
-    @board.remove_piece_at(piece_pos)
-
-    @board.move_piece(@position, piece_pos)
-    @position = piece_pos
-
-    :success
+    exit_code
   end
 
   def to_s
