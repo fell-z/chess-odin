@@ -5,16 +5,9 @@ require_relative "../lib/board"
 # rubocop:disable Metrics
 
 describe Pawn do
-  subject(:pawn) { described_class.new(board, :white, position) }
   let(:position) { [6, 0] }
-  let(:board) { instance_double(Board) }
-
-  before do
-    allow(board).to receive(:at_position)
-    allow(board).to receive(:place_piece_at)
-    allow(board).to receive(:move_piece)
-    allow(board).to receive(:remove_piece_at)
-  end
+  let(:board) { Board.new }
+  subject(:pawn) { described_class.new(board, :white, position) }
 
   it_behaves_like "a subclass of PieceBase"
 
@@ -78,6 +71,80 @@ describe Pawn do
 
         it "returns an empty array" do
           result = pawn.possible_moves
+          expect(result).to be_empty
+        end
+      end
+    end
+  end
+
+  describe "#possible_captures" do
+    context "when its move direction is set to up" do
+      let(:position) { [6, 3] }
+
+      context "with one piece in range" do
+        before { described_class.new(board, :black, [5, 4]) }
+
+        it "returns the position of the piece in range" do
+          expected = [[5, 4]]
+          result = pawn.possible_captures
+          expect(result).to eq(expected)
+        end
+      end
+
+      context "with two pieces in range" do
+        before do
+          described_class.new(board, :black, [5, 4])
+          described_class.new(board, :black, [5, 2])
+        end
+
+        it "returns the positions of the pieces in range" do
+          expected = [[5, 2], [5, 4]]
+          result = pawn.possible_captures
+          expect(result).to eq(expected)
+        end
+      end
+
+      context "with an allied piece in range" do
+        before { described_class.new(board, :white, [5, 4]) }
+
+        it "returns an empty array" do
+          result = pawn.possible_captures
+          expect(result).to be_empty
+        end
+      end
+    end
+
+    context "when its move direction is set to down" do
+      let(:position) { [1, 3] }
+
+      context "with one piece in range" do
+        before { described_class.new(board, :black, [2, 4]) }
+
+        it "returns the position of the piece in range" do
+          expected = [[2, 4]]
+          result = pawn.possible_captures
+          expect(result).to eq(expected)
+        end
+      end
+
+      context "with two pieces in range" do
+        before do
+          described_class.new(board, :black, [2, 4])
+          described_class.new(board, :black, [2, 2])
+        end
+
+        it "returns the positions of the pieces in range" do
+          expected = [[2, 2], [2, 4]]
+          result = pawn.possible_captures
+          expect(result).to eq(expected)
+        end
+      end
+
+      context "with an allied piece in range" do
+        before { described_class.new(board, :white, [2, 4]) }
+
+        it "returns an empty array" do
+          result = pawn.possible_captures
           expect(result).to be_empty
         end
       end
