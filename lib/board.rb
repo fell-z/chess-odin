@@ -38,17 +38,17 @@ class Board
     @board[position[RANK]][position[FILE]]
   end
 
-  def move_piece(piece_pos, dest_pos)
-    @board[dest_pos[RANK]][dest_pos[FILE]] = @board[piece_pos[RANK]][piece_pos[FILE]]
-    @board[piece_pos[RANK]][piece_pos[FILE]] = nil
-  end
-
   def place_piece_at(position, new_piece)
     @board[position[RANK]][position[FILE]] = new_piece
   end
 
   def remove_piece_at(position)
     @board[position[RANK]][position[FILE]] = nil
+  end
+
+  def move_piece(piece_pos, dest_pos)
+    place_piece_at(dest_pos, at_position(piece_pos))
+    remove_piece_at(piece_pos)
   end
 
   private
