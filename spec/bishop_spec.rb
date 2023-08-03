@@ -12,7 +12,7 @@ describe Bishop do
   it_behaves_like "a subclass of PieceBase"
 
   describe "#possible_moves" do
-    context "when it's in the" do
+    context "when it's in" do
       context "one of the default positions, c8" do
         let(:position) { [0, 2] }
 
@@ -144,7 +144,7 @@ describe Bishop do
         end
       end
 
-      context "center, in d4" do
+      context "the center, in d4" do
         let(:position) { [4, 3] }
 
         it "doesn't include those invalid moves near itself" do
@@ -164,6 +164,24 @@ describe Bishop do
           it "returns an empty array of moves" do
             computed_moves = bishop.possible_moves
             expect(computed_moves).to be_empty
+          end
+        end
+      end
+    end
+  end
+
+  describe "#possible_captures" do
+    context "when it's in" do
+      context "one of the default positions, in c8" do
+        let(:position) { [0, 2] }
+
+        context "with a enemy's piece in e6" do
+          before { described_class.new(board, :black, [2, 4]) }
+
+          it "returns that enemy's position" do
+            computed_captures = bishop.possible_captures
+            valid_captures = [[2, 4]]
+            expect(computed_captures).to include(*valid_captures)
           end
         end
       end
