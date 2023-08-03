@@ -184,6 +184,63 @@ describe Bishop do
             expect(computed_captures).to include(*valid_captures)
           end
         end
+
+        context "with two enemy's pieces in range, one in a6 and one in g4" do
+          before do
+            described_class.new(board, :black, [2, 0])
+            described_class.new(board, :black, [4, 6])
+          end
+
+          it "returns those enemy's positions" do
+            computed_captures = bishop.possible_captures
+            valid_captures = [[4, 6], [2, 0]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
+
+        context "with two enemy's pieces in the same direction, one in f5 and one in g4" do
+          before do
+            described_class.new(board, :black, [3, 5])
+            described_class.new(board, :black, [4, 6])
+          end
+
+          it "returns only one of those enemy's positions, the first of them" do
+            computed_captures = bishop.possible_captures
+            valid_captures = [[3, 5]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
+      end
+
+      context "the center, in e4" do
+        let(:position) { [4, 4] }
+
+        context "while surrounded by enemy's pieces" do
+          before do
+            described_class.new(board, :black, [3, 3])
+            described_class.new(board, :black, [3, 5])
+            described_class.new(board, :black, [5, 3])
+            described_class.new(board, :black, [5, 5])
+          end
+
+          it "returns all of those enemy's positions" do
+            computed_captures = bishop.possible_captures
+            valid_captures = [[3, 3], [3, 5], [5, 3], [5, 5]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
+
+        context "with an allied piece in f5 and a enemy's piece in g6" do
+          before do
+            described_class.new(board, :white, [3, 5])
+            described_class.new(board, :black, [2, 6])
+          end
+
+          it "returns an empty array of captures" do
+            computed_captures = bishop.possible_captures
+            expect(computed_captures).to be_empty
+          end
+        end
       end
     end
   end
