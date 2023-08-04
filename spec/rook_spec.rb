@@ -12,145 +12,148 @@ describe Rook do
   it_behaves_like "a subclass of PieceBase"
 
   describe "#possible_moves" do
-    context "when it's in the" do
-      context "top left corner" do
+    context "when it's in" do
+      context "the top left corner, in a8" do
         let(:position) { [0, 0] }
 
-        it "returns only two directions to move to" do
+        it "doesn't include those invalid moves near itself" do
           computed_moves = rook.possible_moves
-          result = computed_moves.all? { |pos| pos[0] >= 0 && pos[1] >= 0 }
-          expect(result).to be_truthy
+          invalid_moves = [[1, 1], [2, 1], [1, 2], [2, 2]]
+          expect(computed_moves).to_not include(*invalid_moves)
         end
 
-        context "and it has a piece obstructing in the same rank" do
-          let!(:obstructive_piece) { described_class.new(board, :white, [0, 5]) }
+        context "with one piece obstructing the way, in f8" do
+          before { described_class.new(board, :white, [0, 5]) }
 
-          it "returns only possible moves before the obstructing piece" do
+          it "doesn't include that piece's position and the next after it" do
             computed_moves = rook.possible_moves
-            result = computed_moves.all? { |pos| pos[0] >= 0 && pos[1] < 5 }
-            expect(result).to be_truthy
+            invalid_moves = [[0, 5], [0, 6]]
+            expect(computed_moves).to_not include(*invalid_moves)
           end
         end
 
-        context "and it has a piece obstructing in the same file" do
-          let!(:obstructive_piece) { described_class.new(board, :white, [5, 0]) }
+        context "with one piece obstructing the way, in a3" do
+          before { described_class.new(board, :white, [5, 0]) }
 
-          it "returns only possible moves before the obstructing piece" do
+          it "doesn't include that piece's position and the next after it" do
             computed_moves = rook.possible_moves
-            result = computed_moves.all? { |pos| pos[0] < 5 && pos[1] >= 0 }
-            expect(result).to be_truthy
+            invalid_moves = [[5, 0], [6, 0]]
+            expect(computed_moves).to_not include(*invalid_moves)
           end
         end
       end
 
-      context "top right corner" do
+      context "the top right corner, in h8" do
         let(:position) { [0, 7] }
 
-        it "returns only two directions to move to" do
+        it "doesn't include those invalid moves near itself" do
           computed_moves = rook.possible_moves
-          result = computed_moves.all? { |pos| pos[0] >= 0 && pos[1] <= 7 }
-          expect(result).to be_truthy
+          invalid_moves = [[1, 6], [2, 6], [1, 5], [2, 5]]
+          expect(computed_moves).to_not include(*invalid_moves)
         end
 
-        context "and it has a piece obstructing in the same rank" do
-          let!(:obstructive_piece) { described_class.new(board, :white, [0, 2]) }
+        context "with one piece obstructing the way, in c8" do
+          before { described_class.new(board, :white, [0, 2]) }
 
-          it "returns only possible moves before the obstructing piece" do
+          it "doesn't include that piece's position and the next after it" do
             computed_moves = rook.possible_moves
-            result = computed_moves.all? { |pos| pos[0] >= 0 && pos[1] > 2 }
-            expect(result).to be_truthy
+            invalid_moves = [[0, 2], [0, 1]]
+            expect(computed_moves).to_not include(*invalid_moves)
           end
         end
 
-        context "and it has a piece obstructing in the same file" do
-          let!(:obstructive_piece) { described_class.new(board, :white, [5, 7]) }
+        context "with one piece obstructing the way, in h3" do
+          before { described_class.new(board, :white, [5, 7]) }
 
-          it "returns only possible moves before the obstructing piece" do
+          it "doesn't include that piece's position and the next after it" do
             computed_moves = rook.possible_moves
-            result = computed_moves.all? { |pos| pos[0] < 5 && pos[1] <= 7 }
-            expect(result).to be_truthy
+            invalid_moves = [[5, 7], [6, 7]]
+            expect(computed_moves).to_not include(*invalid_moves)
           end
         end
       end
 
-      context "bottom left corner" do
+      context "the bottom left corner, in a1" do
         let(:position) { [7, 0] }
 
-        it "returns only two directions to move to" do
+        it "doesn't include those invalid moves near itself" do
           computed_moves = rook.possible_moves
-          result = computed_moves.all? { |pos| pos[0] <= 7 && pos[1] >= 0 }
-          expect(result).to be_truthy
+          invalid_moves = [[6, 1], [6, 2], [5, 1], [5, 2]]
+          expect(computed_moves).to_not include(*invalid_moves)
         end
 
-        context "and it has a piece obstructing in the same rank" do
-          let!(:obstructive_piece) { described_class.new(board, :white, [7, 5]) }
+        context "with one piece obstructing the way, in f1" do
+          before { described_class.new(board, :white, [7, 5]) }
 
-          it "returns only possible moves before the obstructing piece" do
+          it "doesn't include that piece's position and the next after it" do
             computed_moves = rook.possible_moves
-            result = computed_moves.all? { |pos| pos[0] <= 7 && pos[1] < 5 }
-            expect(result).to be_truthy
+            invalid_moves = [[7, 5], [7, 6]]
+            expect(computed_moves).to_not include(*invalid_moves)
           end
         end
 
-        context "and it has a piece obstructing in the same file" do
-          let!(:obstructive_piece) { described_class.new(board, :white, [2, 0]) }
+        context "with one piece obstructing the way, in a6" do
+          before { described_class.new(board, :white, [2, 0]) }
 
-          it "returns only possible moves before the obstructing piece" do
+          it "doesn't include that piece's position and the next after it" do
             computed_moves = rook.possible_moves
-            result = computed_moves.all? { |pos| pos[0] > 2 && pos[1] >= 0 }
-            expect(result).to be_truthy
+            invalid_moves = [[2, 0], [1, 0]]
+            expect(computed_moves).to_not include(*invalid_moves)
           end
         end
       end
 
-      context "bottom right corner" do
+      context "the bottom right corner, in h1" do
         let(:position) { [7, 7] }
 
-        it "returns only two directions to move to" do
+        it "doesn't include those invalid moves near itself" do
           computed_moves = rook.possible_moves
-          result = computed_moves.all? { |pos| pos[0] <= 7 && pos[1] <= 7 }
-          expect(result).to be_truthy
+          invalid_moves = [[6, 6], [6, 5], [5, 6], [5, 5]]
+          expect(computed_moves).to_not include(*invalid_moves)
         end
 
-        context "and it has a piece obstructing in the same rank" do
-          let!(:obstructive_piece) { described_class.new(board, :white, [7, 2]) }
+        context "with one piece obstructing the way, in c1" do
+          before { described_class.new(board, :white, [7, 2]) }
 
-          it "returns only possible moves before the obstructing piece" do
+          it "doesn't include that piece's position and the next after it" do
             computed_moves = rook.possible_moves
-            result = computed_moves.all? { |pos| pos[0] <= 7 && pos[1] > 2 }
-            expect(result).to be_truthy
+            invalid_moves = [[7, 2], [7, 1]]
+            expect(computed_moves).to_not include(*invalid_moves)
           end
         end
 
-        context "and it has a piece obstructing in the same file" do
-          let!(:obstructive_piece) { described_class.new(board, :white, [2, 7]) }
+        context "with one piece obstructing the way, in h6" do
+          before { described_class.new(board, :white, [2, 7]) }
 
-          it "returns only possible moves before the obstructing piece" do
+          it "doesn't include that piece's position and the next after it" do
             computed_moves = rook.possible_moves
-            result = computed_moves.all? { |pos| pos[0] > 2 && pos[1] <= 7 }
-            expect(result).to be_truthy
+            invalid_moves = [[2, 7], [1, 7]]
+            expect(computed_moves).to_not include(*invalid_moves)
           end
         end
       end
 
-      context "middle" do
+      context "the center, in d4" do
         let(:position) { [4, 3] }
 
-        it "returns moves in all possible directions" do
+        it "doesn't include those invalid moves near itself" do
           computed_moves = rook.possible_moves
-          result = computed_moves.all? { |pos| pos[0].between?(0, 7) && pos[1].between?(0, 7) }
-          expect(result).to be_truthy
+          invalid_moves = [[3, 2], [3, 4], [5, 2], [5, 4]]
+          expect(computed_moves).to_not include(*invalid_moves)
         end
-      end
 
-      context "corner trapped by two other pieces" do
-        let(:position) { [0, 0] }
-        let!(:rank_obstructing_piece) { described_class.new(board, :white, [1, 0]) }
-        let!(:file_obstructing_piece) { described_class.new(board, :white, [0, 1]) }
+        context "while surrounded by pieces obstructing the way" do
+          before do
+            described_class.new(board, :white, [4, 2])
+            described_class.new(board, :white, [4, 4])
+            described_class.new(board, :white, [3, 3])
+            described_class.new(board, :white, [5, 3])
+          end
 
-        it "returns an empty array of moves" do
-          computed_moves = rook.possible_moves
-          expect(computed_moves).to be_empty
+          it "returns an empty array of moves" do
+            computed_moves = rook.possible_moves
+            expect(computed_moves).to be_empty
+          end
         end
       end
     end
