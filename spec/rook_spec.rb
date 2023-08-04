@@ -160,69 +160,74 @@ describe Rook do
   end
 
   describe "#possible_captures" do
-    context "when a piece it's in the same rank" do
-      let(:position) { [0, 0] }
-      let!(:rank_enemy_piece) { described_class.new(board, :black, [0, 5]) }
+    context "when it's in" do
+      context "the top left corner, in a8" do
+        let(:position) { [0, 0] }
 
-      it "returns that enemy's position" do
-        computed_captures = rook.possible_captures
-        expect(computed_captures).to include([0, 5])
+        context "with an enemy's piece in a5" do
+          before { described_class.new(board, :black, [3, 0]) }
+
+          it "returns that enemy's position" do
+            computed_captures = rook.possible_captures
+            valid_captures = [[3, 0]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
+
+        context "with an enemy's piece in f8" do
+          before { described_class.new(board, :black, [0, 5]) }
+
+          it "returns that enemy's position" do
+            computed_captures = rook.possible_captures
+            valid_captures = [[0, 5]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
+
+        context "with two enemy's pieces in range, one in a6 and one in d8" do
+          before do
+            described_class.new(board, :black, [2, 0])
+            described_class.new(board, :black, [0, 3])
+          end
+
+          it "returns those enemy's positions" do
+            computed_captures = rook.possible_captures
+            valid_captures = [[2, 0], [0, 3]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
+
+        context "with two enemy's pieces in the same direction, one in c8 and one in e8" do
+          before do
+            described_class.new(board, :black, [0, 2])
+            described_class.new(board, :black, [0, 4])
+          end
+
+          it "returns only one of those enemy's positions, the first of them" do
+            computed_captures = rook.possible_captures
+            valid_captures = [[0, 2]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
       end
-    end
 
-    context "when a piece it's in the same file" do
-      let(:position) { [0, 0] }
-      let!(:file_enemy_piece) { described_class.new(board, :black, [5, 0]) }
+      context "the center, in d4" do
+        let(:position) { [4, 3] }
 
-      it "returns that enemy's position" do
-        computed_captures = rook.possible_captures
-        expect(computed_captures).to include([5, 0])
-      end
-    end
+        context "while surrounded by enemy's pieces" do
+          before do
+            described_class.new(board, :black, [4, 5])
+            described_class.new(board, :black, [4, 1])
+            described_class.new(board, :black, [6, 3])
+            described_class.new(board, :black, [2, 3])
+          end
 
-    context "when there's two pieces, one in the same rank and one in the same file" do
-      let(:position) { [0, 0] }
-      let!(:rank_enemy_piece) { described_class.new(board, :black, [0, 5]) }
-      let!(:file_enemy_piece) { described_class.new(board, :black, [5, 0]) }
-
-      it "returns those two enemy's positions" do
-        computed_captures = rook.possible_captures
-        expect(computed_captures).to include([0, 5], [5, 0])
-      end
-    end
-
-    context "when there's four pieces, in all directions" do
-      let(:position) { [4, 3] }
-      let!(:first_enemy_piece) { described_class.new(board, :black, [4, 5]) }
-      let!(:second_enemy_piece) { described_class.new(board, :black, [4, 1]) }
-      let!(:third_enemy_piece) { described_class.new(board, :black, [6, 3]) }
-      let!(:fourth_enemy_piece) { described_class.new(board, :black, [2, 3]) }
-
-      it "returns all of those enemy's positions" do
-        computed_captures = rook.possible_captures
-        expect(computed_captures).to include([4, 5], [4, 1], [6, 3], [2, 3])
-      end
-    end
-
-    context "when there's two pieces in the same rank, but different files" do
-      let(:position) { [0, 0] }
-      let!(:first_enemy_piece) { described_class.new(board, :black, [0, 3]) }
-      let!(:second_enemy_piece) { described_class.new(board, :black, [0, 5]) }
-
-      it "returns only one of those two enemy's position, the first of them" do
-        computed_captures = rook.possible_captures
-        expect(computed_captures).to include([0, 3])
-      end
-    end
-
-    context "when there's two pieces in the same file, but different ranks" do
-      let(:position) { [0, 0] }
-      let!(:first_enemy_piece) { described_class.new(board, :black, [3, 0]) }
-      let!(:second_enemy_piece) { described_class.new(board, :black, [5, 0]) }
-
-      it "returns only one of those two enemy's position, the first of them" do
-        computed_captures = rook.possible_captures
-        expect(computed_captures).to include([3, 0])
+          it "returns all of those enemy's positions" do
+            computed_captures = rook.possible_captures
+            valid_captures = [[4, 5], [4, 1], [6, 3], [2, 3]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
       end
     end
   end
