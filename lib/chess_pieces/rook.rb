@@ -23,7 +23,8 @@ class Rook < PieceBase
       squares_towards_to(direction).each do |square|
         next if @board.at_position(square).nil?
 
-        break captures << square if @board.at_position(square).side != @side
+        captures << square if @board.at_position(square).side != @side
+        break
       end
     end
 
