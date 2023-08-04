@@ -175,7 +175,7 @@ describe Bishop do
       context "one of the default positions, in c8" do
         let(:position) { [0, 2] }
 
-        context "with a enemy's piece in e6" do
+        context "with an enemy's piece in e6" do
           before { described_class.new(board, :black, [2, 4]) }
 
           it "returns that enemy's position" do
