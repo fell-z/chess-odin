@@ -27,6 +27,51 @@ describe Knight do
           invalid_moves = [[1, 2], [1, 4]]
           expect(computed_moves).to_not include(*invalid_moves)
         end
+
+        context "with one piece occupying in a6" do
+          before { described_class.new(board, :white, [2, 0]) }
+
+          it "includes the position c6" do
+            computed_moves = knight.possible_moves
+            valid_moves = [[2, 2]]
+            expect(computed_moves).to include(*valid_moves)
+          end
+
+          it "doesn't include the position a6" do
+            computed_moves = knight.possible_moves
+            invalid_moves = [[2, 0]]
+            expect(computed_moves).to_not include(*invalid_moves)
+          end
+        end
+      end
+
+      context "the center, in d4" do
+        let(:position) { [4, 3] }
+
+        it "includes the positions e2, f5, b3 and e6" do
+          computed_moves = knight.possible_moves
+          valid_moves = [[6, 4], [3, 5], [5, 1], [2, 4]]
+          expect(computed_moves).to include(*valid_moves)
+        end
+
+        it "doesn't include the positions d6, c4 and g5" do
+          computed_moves = knight.possible_moves
+          invalid_moves = [[2, 3], [4, 2], [3, 6]]
+          expect(computed_moves).to_not include(*invalid_moves)
+        end
+
+        context "with two pieces occupying the c6 and f3" do
+          before do
+            described_class.new(board, :white, [2, 2])
+            described_class.new(board, :white, [5, 5])
+          end
+
+          it "doesn't include the positions c6 and f3" do
+            computed_moves = knight.possible_moves
+            invalid_moves = [[2, 2], [5, 5]]
+            expect(computed_moves).to_not include(*invalid_moves)
+          end
+        end
       end
     end
   end
