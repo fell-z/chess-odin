@@ -228,6 +228,18 @@ describe Rook do
             expect(computed_captures).to include(*valid_captures)
           end
         end
+
+        context "with an allied piece in d3 and a enemy's piece in d2" do
+          before do
+            described_class.new(board, :white, [5, 3])
+            described_class.new(board, :black, [6, 3])
+          end
+
+          it "returns an empty array of captures" do
+            computed_captures = rook.possible_captures
+            expect(computed_captures).to be_empty
+          end
+        end
       end
     end
   end
