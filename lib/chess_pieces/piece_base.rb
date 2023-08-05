@@ -51,7 +51,7 @@ class PieceBase
     current_position = @position.dup
 
     while current_position.all? { |value| value.between?(0, 7) }
-      current_position.map!.with_index { |value, index| value + direction[index] }
+      current_position = [current_position, direction].transpose.map(&:sum)
       squares << current_position.dup if current_position.all? { |value| value.between?(0, 7) }
     end
 
