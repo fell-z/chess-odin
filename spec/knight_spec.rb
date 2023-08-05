@@ -75,4 +75,35 @@ describe Knight do
       end
     end
   end
+
+  describe "#possible_captures" do
+    context "when it's in" do
+      context "one of the default positions, in g8" do
+        let(:position) { [0, 6] }
+
+        context "with an enemy's piece in f6" do
+          before { described_class.new(board, :black, [2, 5]) }
+
+          it "returns that enemy's position" do
+            computed_captures = knight.possible_captures
+            valid_captures = [[2, 5]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
+
+        context "with two enemy's pieces in range, one in e7 and one in h6" do
+          before do
+            described_class.new(board, :black, [1, 4])
+            described_class.new(board, :black, [2, 7])
+          end
+
+          it "returns those enemy's positions" do
+            computed_captures = knight.possible_captures
+            valid_captures = [[1, 4], [2, 7]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
+      end
+    end
+  end
 end
