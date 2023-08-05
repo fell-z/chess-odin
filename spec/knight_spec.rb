@@ -104,6 +104,25 @@ describe Knight do
           end
         end
       end
+
+      context "the center, in d4" do
+        let(:position) { [4, 3] }
+
+        context "with four enemy's pieces in range, in: c2, b5, f3 and e6" do
+          before do
+            described_class.new(board, :black, [6, 2])
+            described_class.new(board, :black, [3, 1])
+            described_class.new(board, :black, [5, 5])
+            described_class.new(board, :black, [2, 4])
+          end
+
+          it "returns all of those enemy's positions" do
+            computed_captures = knight.possible_captures
+            valid_captures = [[6, 2], [3, 1], [5, 5], [2, 4]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
+      end
     end
   end
 end
