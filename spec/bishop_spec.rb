@@ -22,6 +22,12 @@ describe Bishop do
           expect(computed_moves).to_not include(*invalid_moves)
         end
 
+        it "includes the positions f5 and a6" do
+          computed_moves = bishop.possible_moves
+          valid_moves = [[3, 5], [2, 0]]
+          expect(computed_moves).to include(*valid_moves)
+        end
+
         context "with one piece obstructing the way, in b7" do
           before { described_class.new(board, :white, [1, 1]) }
 
@@ -53,6 +59,12 @@ describe Bishop do
           computed_moves = bishop.possible_moves
           invalid_moves = [[0, 4], [0, 6], [1, 5], [2, 5], [2, 4], [2, 6]]
           expect(computed_moves).to_not include(*invalid_moves)
+        end
+
+        it "includes the positions b4 and g7" do
+          computed_moves = bishop.possible_moves
+          valid_moves = [[4, 1], [1, 6]]
+          expect(computed_moves).to include(*valid_moves)
         end
 
         context "with one piece obstructing the way, in b4" do
@@ -88,6 +100,12 @@ describe Bishop do
           expect(computed_moves).to_not include(*invalid_moves)
         end
 
+        it "includes the positions e3 and g5" do
+          computed_moves = bishop.possible_moves
+          valid_moves = [[5, 4], [3, 6]]
+          expect(computed_moves).to include(*valid_moves)
+        end
+
         context "with one piece obstructing the way, in e3" do
           before { described_class.new(board, :white, [5, 4]) }
 
@@ -118,6 +136,12 @@ describe Bishop do
           computed_moves = bishop.possible_moves
           invalid_moves = [[7, 4], [7, 6], [6, 5], [5, 5], [5, 4], [5, 6]]
           expect(computed_moves).to_not include(*invalid_moves)
+        end
+
+        it "includes the positions e2 and a6" do
+          computed_moves = bishop.possible_moves
+          valid_moves = [[6, 4], [2, 0]]
+          expect(computed_moves).to include(*valid_moves)
         end
 
         context "with one piece obstructing the way, in g2" do
@@ -151,6 +175,12 @@ describe Bishop do
           computed_moves = bishop.possible_moves
           invalid_moves = [[3, 3], [5, 3], [4, 2], [4, 4]]
           expect(computed_moves).to_not include(*invalid_moves)
+        end
+
+        it "includes the positions c3, g7 and b6" do
+          computed_moves = bishop.possible_moves
+          valid_moves = [[5, 2], [1, 6], [2, 1]]
+          expect(computed_moves).to include(*valid_moves)
         end
 
         context "while surrounded by pieces obstructing the way" do
