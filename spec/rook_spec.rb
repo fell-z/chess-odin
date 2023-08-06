@@ -22,6 +22,12 @@ describe Rook do
           expect(computed_moves).to_not include(*invalid_moves)
         end
 
+        it "includes the positions a5 and e8" do
+          computed_moves = rook.possible_moves
+          valid_moves = [[3, 0], [0, 4]]
+          expect(computed_moves).to include(*valid_moves)
+        end
+
         context "with one piece obstructing the way, in f8" do
           before { described_class.new(board, :white, [0, 5]) }
 
@@ -50,6 +56,12 @@ describe Rook do
           computed_moves = rook.possible_moves
           invalid_moves = [[1, 6], [2, 6], [1, 5], [2, 5]]
           expect(computed_moves).to_not include(*invalid_moves)
+        end
+
+        it "includes the positions h1 and g8" do
+          computed_moves = rook.possible_moves
+          valid_moves = [[7, 7], [0, 6]]
+          expect(computed_moves).to include(*valid_moves)
         end
 
         context "with one piece obstructing the way, in c8" do
@@ -82,6 +94,12 @@ describe Rook do
           expect(computed_moves).to_not include(*invalid_moves)
         end
 
+        it "includes the positions f1 and a7" do
+          computed_moves = rook.possible_moves
+          valid_moves = [[7, 5], [1, 0]]
+          expect(computed_moves).to include(*valid_moves)
+        end
+
         context "with one piece obstructing the way, in f1" do
           before { described_class.new(board, :white, [7, 5]) }
 
@@ -112,6 +130,12 @@ describe Rook do
           expect(computed_moves).to_not include(*invalid_moves)
         end
 
+        it "includes the positions h6 and b1" do
+          computed_moves = rook.possible_moves
+          valid_moves = [[2, 7], [7, 1]]
+          expect(computed_moves).to include(*valid_moves)
+        end
+
         context "with one piece obstructing the way, in c1" do
           before { described_class.new(board, :white, [7, 2]) }
 
@@ -140,6 +164,12 @@ describe Rook do
           computed_moves = rook.possible_moves
           invalid_moves = [[3, 2], [3, 4], [5, 2], [5, 4]]
           expect(computed_moves).to_not include(*invalid_moves)
+        end
+
+        it "includes the positions d2, h4 and d8" do
+          computed_moves = rook.possible_moves
+          valid_moves = [[6, 3], [4, 7], [0, 3]]
+          expect(computed_moves).to include(*valid_moves)
         end
 
         context "while surrounded by pieces obstructing the way" do
