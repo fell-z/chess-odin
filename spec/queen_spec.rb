@@ -85,4 +85,38 @@ describe Queen do
       end
     end
   end
+
+  describe "#possible_captures" do
+    context "when it's in" do
+      context "one of the default positions, d8" do
+        let(:position) { [0, 3] }
+
+        context "with two enemy's pieces in range, one in d4 and one in f8" do
+          before do
+            described_class.new(board, :black, [4, 3])
+            described_class.new(board, :black, [0, 5])
+          end
+
+          it "returns the positions d4 and f8" do
+            computed_captures = queen.possible_captures
+            valid_captures = [[4, 3], [0, 5]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
+
+        context "with two enemy's pieces in the same direction, one in f6 and one in g5" do
+          before do
+            described_class.new(board, :black, [2, 5])
+            described_class.new(board, :black, [3, 6])
+          end
+
+          it "returns only one of those enemy's positions, f6" do
+            computed_captures = queen.possible_captures
+            valid_captures = [[2, 5]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
+      end
+    end
+  end
 end
