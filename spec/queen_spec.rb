@@ -117,6 +117,36 @@ describe Queen do
           end
         end
       end
+
+      context "the center, in d4" do
+        let(:position) { [4, 3] }
+
+        context "with three enemy's pieces in range, one in b2, one in e3 and one in h4" do
+          before do
+            described_class.new(board, :black, [6, 1])
+            described_class.new(board, :black, [5, 4])
+            described_class.new(board, :black, [4, 7])
+          end
+
+          it "returns the positions b2, e3 and h4" do
+            computed_captures = queen.possible_captures
+            valid_captures = [[6, 1], [5, 4], [4, 7]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
+
+        context "with an allied piece in d6 and a enemy's piece in d7" do
+          before do
+            described_class.new(board, :white, [2, 3])
+            described_class.new(board, :black, [1, 3])
+          end
+
+          it "returns an empty array of captures" do
+            computed_captures = queen.possible_captures
+            expect(computed_captures).to be_empty
+          end
+        end
+      end
     end
   end
 end
