@@ -16,6 +16,22 @@ class King < PieceBase
     moves
   end
 
+  def possible_captures
+    captures = []
+
+    DIRECTIONS.each_value do |direction|
+      new_capture = [@position, direction].transpose.map(&:sum)
+
+      next unless new_capture.all? { |value| value.between?(0, 7) }
+
+      unless @board.at_position(new_capture).nil? || @board.at_position(new_capture).side == @side
+        next captures << new_capture
+      end
+    end
+
+    captures
+  end
+
   def to_s
     "♚"
   end
