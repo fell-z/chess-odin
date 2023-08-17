@@ -1,8 +1,5 @@
 # This base class has all methods and constants that are common to all standard chess pieces.
 class PieceBase
-  RANK = 0
-  FILE = 1
-
   DIRECTIONS = {
     up: [-1, 0],
     down: [1, 0],

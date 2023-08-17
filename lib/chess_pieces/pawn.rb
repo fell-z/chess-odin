@@ -2,6 +2,9 @@ require_relative "./piece_base"
 
 # Implementation of chess pawn
 class Pawn < PieceBase
+  RANK = 0
+  FILE = 1
+
   DOWN = 1
   UP = -1
 
