@@ -85,4 +85,43 @@ describe King do
       end
     end
   end
+
+  describe "#possible_captures" do
+    context "when it's in" do
+      context "one of the default positions, e8" do
+        let(:position) { [0, 4] }
+
+        context "with two enemy's pieces in range, one in d7 and one in f8" do
+          before do
+            described_class.new(board, :black, [1, 3])
+            described_class.new(board, :black, [0, 5])
+          end
+
+          it "returns the positions d7 and f8" do
+            computed_captures = king.possible_captures
+            valid_captures = [[1, 3], [0, 5]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
+      end
+
+      context "the center, in d4" do
+        let(:position) { [4, 3] }
+
+        context "with three enemy's pieces in range, one in d5, one in e3 and one in c4" do
+          before do
+            described_class.new(board, :black, [3, 3])
+            described_class.new(board, :black, [5, 4])
+            described_class.new(board, :black, [4, 2])
+          end
+
+          it "returns the positions d5, e3 and c4" do
+            computed_captures = king.possible_captures
+            valid_captures = [[3, 3], [5, 4], [4, 2]]
+            expect(computed_captures).to include(*valid_captures)
+          end
+        end
+      end
+    end
+  end
 end
