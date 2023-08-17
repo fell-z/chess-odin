@@ -1,7 +1,9 @@
-require_relative "./piece_base"
+require_relative "./modules/piece_base"
 
 # Implementation of chess pawn
-class Pawn < PieceBase
+class Pawn
+  include PieceBase
+
   RANK = 0
   FILE = 1
 

@@ -1,7 +1,9 @@
-require_relative "./piece_base"
+require_relative "./modules/piece_base"
 
 # Implementation of chess king
-class King < PieceBase
+class King
+  include PieceBase
+
   def possible_moves
     moves = []
 
