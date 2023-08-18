@@ -40,18 +40,4 @@ module PieceBase
 
     :success
   end
-
-  private
-
-  def squares_towards_to(direction)
-    squares = []
-    current_position = @position.dup
-
-    while current_position.all? { |value| value.between?(0, 7) }
-      current_position = [current_position, direction].transpose.map(&:sum)
-      squares << current_position.dup if current_position.all? { |value| value.between?(0, 7) }
-    end
-
-    squares
-  end
 end
