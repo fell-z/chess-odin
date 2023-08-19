@@ -35,7 +35,7 @@ describe Pawn do
 
       context "when it's in a position close to the top edge" do
         let(:position) { [0, 0] }
-        before { pawn.instance_variable_set(:@move_direction, -1) }
+        before { pawn.instance_variable_set(:@move_direction, :up) }
 
         it "returns an empty array" do
           result = pawn.possible_moves
@@ -67,7 +67,7 @@ describe Pawn do
 
       context "when it's in a position close to the bottom edge" do
         let(:position) { [7, 0] }
-        before { pawn.instance_variable_set(:@move_direction, 1) }
+        before { pawn.instance_variable_set(:@move_direction, :down) }
 
         it "returns an empty array" do
           result = pawn.possible_moves

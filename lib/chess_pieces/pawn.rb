@@ -4,53 +4,37 @@ require_relative "./modules/piece_base"
 class Pawn
   include PieceBase
 
-  RANK = 0
-  FILE = 1
-
-  DOWN = 1
-  UP = -1
-
   def initialize(board, side, position)
     super
 
-    @move_direction = position[RANK] == 1 ? DOWN : UP
+    @move_direction = position[0] == 1 ? :down : :up
     @first_move = true
   end
 
-  # rubocop:disable Metrics/MethodLength
   def possible_moves
-    rank = @position[RANK]
-    file = @position[FILE]
+    moves = []
 
-    moves =
-      if @first_move
-        [[rank + (1 * @move_direction), file], [rank + (2 * @move_direction), file]]
-      else
-        [[rank + (1 * @move_direction), file]]
-      end
+    moves << add(@position, direction_to_move)
+    moves << add(@position, direction_to_move.map { |value| value * 2 }) if @first_move
 
-    moves.select do |move_pos|
-      move_pos.all? { |value| value.between?(0, 7) } && @board.at_position(move_pos).nil?
-    end
+    moves.select { |move| move.all? { |value| value.between?(0, 7) } && @board.at_position(move).nil? }
   end
-  # rubocop:enable Metrics/MethodLength
 
-  # rubocop:disable Metrics/AbcSize
   def possible_captures
-    current_rank = @position[RANK]
-    current_file = @position[FILE]
+    captures = []
 
-    captures = [
-      [current_rank + (1 * @move_direction), current_file - 1],
-      [current_rank + (1 * @move_direction), current_file + 1]
-    ].select { |capture_pos| capture_pos.all? { |value| value.between?(0, 7) } }
+    directions_to_capture.each_value do |direction|
+      new_capture = add(@position, direction)
 
-    captures.reject do |capture_pos|
-      possible_capture = @board.at_position(capture_pos)
-      possible_capture.nil? || possible_capture.side == @side
+      next unless new_capture.all? { |value| value.between?(0, 7) }
+
+      unless @board.at_position(new_capture).nil? || @board.at_position(new_capture).side == @side
+        next captures << new_capture
+      end
     end
+
+    captures
   end
-  # rubocop:enable Metrics/AbcSize
 
   def move(dest_pos)
     exit_code = super
@@ -70,5 +54,25 @@ class Pawn
 
   def to_s
     "♟"
+  end
+
+  private
+
+  def add(position, direction)
+    [position, direction].transpose.map(&:sum)
+  end
+
+  def direction_to_move
+    {
+      up: [-1, 0],
+      down: [1, 0]
+    }[@move_direction]
+  end
+
+  def directions_to_capture
+    {
+      left: add(direction_to_move, [0, -1]),
+      right: add(direction_to_move, [0, 1])
+    }
   end
 end
