@@ -6,6 +6,30 @@ class Rook
   include PieceBase
   include StandardMovement
 
+  attr_reader :first_move
+
+  def initialize(board, side, position)
+    super
+
+    @first_move = true
+  end
+
+  def move(dest_pos)
+    exit_code = super
+
+    @first_move = false if exit_code == :success && @first_move
+
+    exit_code
+  end
+
+  def capture(piece_pos)
+    exit_code = super
+
+    @first_move = false if exit_code == :success && @first_move
+
+    exit_code
+  end
+
   def to_s
     "♜"
   end

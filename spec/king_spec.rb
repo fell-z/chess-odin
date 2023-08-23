@@ -1,5 +1,6 @@
 require_relative "./piece_base_shared_spec"
 require_relative "../lib/chess_pieces/king"
+require_relative "../lib/chess_pieces/rook"
 require_relative "../lib/board"
 
 # rubocop:disable Metrics
@@ -120,6 +121,34 @@ describe King do
             valid_captures = [[3, 3], [5, 4], [4, 2]]
             expect(computed_captures).to include(*valid_captures)
           end
+        end
+      end
+    end
+  end
+
+  describe "#castling" do
+    context "at the eighth rank" do
+      let(:position) { [0, 4] }
+
+      context "on the kingside" do
+        let!(:rook) { Rook.new(board, :white, [0, 7]) }
+
+        it "successfully performs the castling, changing the positions of the king and rook" do
+          desired_king_position = [0, 6]
+          desired_rook_position = [0, 5]
+          expect { king.castling(:kingside) }.to change { king.position }.to(desired_king_position)
+                                             .and change { rook.position }.to(desired_rook_position)
+        end
+      end
+
+      context "on the queenside" do
+        let!(:rook) { Rook.new(board, :white, [0, 0]) }
+
+        it "successfully performs the castling, changing the positions of the king and rook" do
+          desired_king_position = [0, 2]
+          desired_rook_position = [0, 3]
+          expect { king.castling(:queenside) }.to change { king.position }.to(desired_king_position)
+                                              .and change { rook.position }.to(desired_rook_position)
         end
       end
     end
