@@ -139,6 +139,28 @@ describe King do
           expect { king.castling(:kingside) }.to change { king.position }.to(desired_king_position)
                                              .and change { rook.position }.to(desired_rook_position)
         end
+
+        context "with king's move not being the first" do
+          before { king.instance_variable_set(:@first_move, false) }
+
+          it "fails, so it doesn't change any of the piece's positions" do
+            original_king_position = king.position
+            original_rook_position = rook.position
+            king.castling(:kingside)
+            expect([king.position, rook.position]).to eq([original_king_position, original_rook_position])
+          end
+        end
+
+        context "with rook's move not being the first" do
+          before { king.instance_variable_set(:@first_move, false) }
+
+          it "fails, so it doesn't change any of the piece's positions" do
+            original_king_position = king.position
+            original_rook_position = rook.position
+            king.castling(:kingside)
+            expect([king.position, rook.position]).to eq([original_king_position, original_rook_position])
+          end
+        end
       end
 
       context "on the queenside" do
@@ -149,6 +171,98 @@ describe King do
           desired_rook_position = [0, 3]
           expect { king.castling(:queenside) }.to change { king.position }.to(desired_king_position)
                                               .and change { rook.position }.to(desired_rook_position)
+        end
+
+        context "with king's move not being the first" do
+          before { king.instance_variable_set(:@first_move, false) }
+
+          it "fails, so it doesn't change any of the piece's positions" do
+            original_king_position = king.position
+            original_rook_position = rook.position
+            king.castling(:kingside)
+            expect([king.position, rook.position]).to eq([original_king_position, original_rook_position])
+          end
+        end
+
+        context "with rook's move not being the first" do
+          before { king.instance_variable_set(:@first_move, false) }
+
+          it "fails, so it doesn't change any of the piece's positions" do
+            original_king_position = king.position
+            original_rook_position = rook.position
+            king.castling(:kingside)
+            expect([king.position, rook.position]).to eq([original_king_position, original_rook_position])
+          end
+        end
+      end
+    end
+
+    context "at the first rank" do
+      let(:position) { [7, 4] }
+
+      context "on the kingside" do
+        let!(:rook) { Rook.new(board, :white, [7, 7]) }
+
+        it "successfully performs the castling, changing the positions of the king and rook" do
+          desired_king_position = [7, 6]
+          desired_rook_position = [7, 5]
+          expect { king.castling(:kingside) }.to change { king.position }.to(desired_king_position)
+                                             .and change { rook.position }.to(desired_rook_position)
+        end
+
+        context "with king's move not being the first" do
+          before { king.instance_variable_set(:@first_move, false) }
+
+          it "fails, so it doesn't change any of the piece's positions" do
+            original_king_position = king.position
+            original_rook_position = rook.position
+            king.castling(:kingside)
+            expect([king.position, rook.position]).to eq([original_king_position, original_rook_position])
+          end
+        end
+
+        context "with rook's move not being the first" do
+          before { king.instance_variable_set(:@first_move, false) }
+
+          it "fails, so it doesn't change any of the piece's positions" do
+            original_king_position = king.position
+            original_rook_position = rook.position
+            king.castling(:kingside)
+            expect([king.position, rook.position]).to eq([original_king_position, original_rook_position])
+          end
+        end
+      end
+
+      context "on the queenside" do
+        let!(:rook) { Rook.new(board, :white, [7, 0]) }
+
+        it "successfully performs the castling, changing the positions of the king and rook" do
+          desired_king_position = [7, 2]
+          desired_rook_position = [7, 3]
+          expect { king.castling(:queenside) }.to change { king.position }.to(desired_king_position)
+                                              .and change { rook.position }.to(desired_rook_position)
+        end
+
+        context "with king's move not being the first" do
+          before { king.instance_variable_set(:@first_move, false) }
+
+          it "fails, so it doesn't change any of the piece's positions" do
+            original_king_position = king.position
+            original_rook_position = rook.position
+            king.castling(:kingside)
+            expect([king.position, rook.position]).to eq([original_king_position, original_rook_position])
+          end
+        end
+
+        context "with rook's move not being the first" do
+          before { king.instance_variable_set(:@first_move, false) }
+
+          it "fails, so it doesn't change any of the piece's positions" do
+            original_king_position = king.position
+            original_rook_position = rook.position
+            king.castling(:kingside)
+            expect([king.position, rook.position]).to eq([original_king_position, original_rook_position])
+          end
         end
       end
     end
