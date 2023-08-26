@@ -5,7 +5,7 @@ module StandardMovement
 
     directions.each_value do |direction|
       squares_towards_to(direction).each do |square|
-        break unless @board.at_position(square).nil?
+        break unless @board.empty_at?(square)
 
         moves << square
       end
@@ -19,7 +19,7 @@ module StandardMovement
 
     directions.each_value do |direction|
       squares_towards_to(direction).each do |square|
-        next if @board.at_position(square).nil?
+        next if @board.empty_at?(square)
 
         captures << square if @board.at_position(square).side != @side
         break

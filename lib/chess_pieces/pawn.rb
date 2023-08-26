@@ -17,7 +17,7 @@ class Pawn
     moves << add(@position, direction_to_move)
     moves << add(@position, direction_to_move.map { |value| value * 2 }) if @first_move
 
-    moves.select { |move| move.all? { |value| value.between?(0, 7) } && @board.at_position(move).nil? }
+    moves.select { |move| move.all? { |value| value.between?(0, 7) } && @board.empty_at?(move) }
   end
 
   def possible_captures
@@ -28,7 +28,7 @@ class Pawn
 
       next unless new_capture.all? { |value| value.between?(0, 7) }
 
-      unless @board.at_position(new_capture).nil? || @board.at_position(new_capture).side == @side
+      unless @board.empty_at?(new_capture) || @board.at_position(new_capture).side == @side
         next captures << new_capture
       end
     end
