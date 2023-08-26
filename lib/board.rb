@@ -51,6 +51,12 @@ class Board
     remove_piece_at(piece_pos)
   end
 
+  def empty_at?(positions)
+    return positions.all? { |pos| at_position(pos).nil? } if positions.all? { |pos| pos.is_a?(Array) }
+
+    at_position(positions).nil?
+  end
+
   private
 
   def build_rank(bg_color_sequence, fg_color_sequence, rank_squares)
