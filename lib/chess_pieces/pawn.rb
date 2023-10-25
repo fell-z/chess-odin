@@ -36,6 +36,18 @@ class Pawn
     captures
   end
 
+  def promote?
+    (@move_direction == :down && @position[0] == 7) ||
+      (@move_direction == :up && @position[0] == 0)
+  end
+
+  def promote(piece)
+    return self if %w[King Pawn].include?(piece.to_s)
+
+    @board.remove_piece_at(@position)
+    piece.new(@board, @side, @position)
+  end
+
   def move(dest_pos)
     exit_code = super
 
