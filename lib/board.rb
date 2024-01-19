@@ -57,6 +57,10 @@ class Board
     at_position(positions).nil?
   end
 
+  def all_pieces_of(side)
+    @board.flatten.compact.select { |piece| piece.side == side }
+  end
+
   private
 
   def build_rank(bg_color_sequence, fg_color_sequence, rank_squares)

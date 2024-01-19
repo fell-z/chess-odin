@@ -2,6 +2,13 @@ require_relative "./input_parser"
 
 # Implementation of a player, with methods to ask for a input(be a move or some decision) and etc.
 class Player
+  attr_reader :side
+
+  def initialize(board, side)
+    @board = board
+    @side = side
+  end
+
   def input
     gets.chomp
   end
@@ -19,5 +26,13 @@ class Player
     return :failure unless indexes == indexes.sort
 
     play
+  end
+
+  def pieces(&filter)
+    all_pieces = @board.all_pieces_of(@side)
+
+    return all_pieces unless block_given?
+
+    all_pieces.select(&filter)
   end
 end
