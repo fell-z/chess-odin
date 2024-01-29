@@ -38,6 +38,25 @@ class King
   end
   # rubocop:enable Metrics/MethodLength
 
+  def check?
+    opponent_pieces = @board.all_pieces_of(@side == :white ? :black : :white)
+    opponent_pieces.any? { |piece| piece.possible_captures.include?(@position) }
+  end
+
+  def checkmate?
+    ally_pieces = @board.all_pieces_of(@side).reject { |piece| piece.is_a?(King) }
+
+    save_trys = []
+
+    save_trys.concat(save_by_moving(self), save_by_capturing(self))
+
+    ally_pieces.each do |ally_piece|
+      save_trys.concat(save_by_moving(ally_piece, @position), save_by_capturing(ally_piece, @position))
+    end
+
+    save_trys.all?
+  end
+
   def move(dest_pos)
     exit_code = super
 
@@ -62,5 +81,45 @@ class King
 
   def directions
     DIRECTIONS
+  end
+
+  # The following method is a bit specific in its objective, the name don't exactly translate
+  # what it is doing.
+  # They try all possible moves of the specified piece and check if any of the opponent pieces
+  # have(or still have) the capture position of the king's square(if provided) or the move position
+  # itself(in case the specified piece is the king).
+  def save_by_moving(piece, king_square = nil)
+    save_trys = []
+
+    piece.possible_moves.each do |move_pos|
+      @board.move_piece(piece.position, move_pos)
+      opponent_pieces = @board.all_pieces_of(@side == :white ? :black : :white)
+      save_trys <<
+        opponent_pieces.any? { |opponent_piece| opponent_piece.possible_captures.include?(king_square || move_pos) }
+      @board.move_piece(move_pos, piece.position)
+    end
+
+    save_trys.uniq
+  end
+
+  # The following method is a bit specific in its objective, the name don't exactly translate
+  # what it is doing.
+  # They try all possible captures of the specified piece and check if any of the opponent pieces
+  # have(or still have) the capture position of the king's square(if provided) or the capture position
+  # itself(in case the specified piece is the king).
+  def save_by_capturing(piece, king_square = nil)
+    save_trys = []
+
+    piece.possible_captures.each do |capture_pos|
+      captured_piece = @board.at_position(capture_pos)
+      @board.move_piece(piece.position, capture_pos)
+      opponent_pieces = @board.all_pieces_of(@side == :white ? :black : :white)
+      save_trys <<
+        opponent_pieces.any? { |opponent_piece| opponent_piece.possible_captures.include?(king_square || capture_pos) }
+      @board.move_piece(capture_pos, piece.position)
+      @board.place_piece_at(capture_pos, captured_piece)
+    end
+
+    save_trys.uniq
   end
 end
