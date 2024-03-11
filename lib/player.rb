@@ -35,4 +35,8 @@ class Player
 
     all_pieces.select(&filter)
   end
+
+  def king
+    pieces { |piece| piece.is_a?(King) }[0]
+  end
 end
