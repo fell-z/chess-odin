@@ -12,8 +12,7 @@ class King
     @first_move = true
   end
 
-  # rubocop:disable Metrics/MethodLength
-  def castling(side)
+  def castling?(side)
     king_rank = @position[0]
     rook_file = side == :kingside ? 7 : 0
     rook = @board.at_position([king_rank, rook_file])
@@ -22,8 +21,19 @@ class King
       { kingside: [[king_rank, 5], [king_rank, 6]],
         queenside: [[king_rank, 3], [king_rank, 2], [king_rank, 1]] }[side]
 
-    return :failure unless rook.is_a?(Rook) && (@first_move && rook.first_move)
-    return :failure unless @board.empty_at?(verifying_squares)
+    return false unless rook.is_a?(Rook) && (@first_move && rook.first_move)
+    return false unless @board.empty_at?(verifying_squares)
+
+    true
+  end
+
+  # rubocop:disable Metrics/MethodLength
+  def castling(side)
+    return :failure unless castling?(side)
+
+    king_rank = @position[0]
+    rook_file = side == :kingside ? 7 : 0
+    rook = @board.at_position([king_rank, rook_file])
 
     new_positions =
       { kingside: { king: [king_rank, 6], rook: [king_rank, 5] },
