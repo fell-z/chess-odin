@@ -2,10 +2,13 @@ require "yaml"
 require_relative "./chess_pieces"
 require_relative "./board"
 require_relative "./player"
+require_relative "./saveable"
 
 # This class manages the game loop, calling the methods and resolving the outcomes of it,
 # proceding it until the game is over.
 class Game
+  include Saveable
+
   SUCCESS = true
   FAILURE = false
 
@@ -19,6 +22,8 @@ class Game
     welcome_message
     place_all_pieces
     gets.chomp
+
+    load_save(select_save) if load_save?
   end
 
   def start
@@ -36,6 +41,9 @@ class Game
       puts "< #{current_player.side}'s turn >"
 
       result = start_player_turn(current_player)
+
+      break save_game if result == :save
+
       next if result == FAILURE
 
       @player_order.rotate!
@@ -45,6 +53,8 @@ class Game
   # rubocop:disable Metrics
   def start_player_turn(player)
     play = player_input(player)
+
+    return play if play == :save
 
     return player.king.castling(play[:castling_type]) if play[:castling?]
 
@@ -94,6 +104,8 @@ class Game
   def player_input(player)
     loop do
       play = player.play_input
+
+      return play if play == :save
 
       next input_error_message if play == FAILURE
 
@@ -204,6 +216,8 @@ class Game
                 whereas 'xy' stands for the usual input and Z stands for the piece wanted to promote to.
 
       The game starts with the white pieces.
+      You can save whenever you want by typing 'save'.
+
       Press Enter to continue.
     WELCOME
   end

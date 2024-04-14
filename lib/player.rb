@@ -19,6 +19,8 @@ class Player
   def play_input
     player_input = input
 
+    return :save if player_input == "save"
+
     parsed_castling = InputParser.parse_castling(player_input)
     return { piece: King }.merge(parsed_castling) if parsed_castling[:castling?]
 
