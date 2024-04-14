@@ -20,18 +20,10 @@ class Board
   end
 
   def render
-    system("clear")
-    bg_color_sequence = %i[purple blue purple blue purple blue purple blue]
-
     puts "┌#{'────────' * 8}┐"
-    @board.each do |rank|
-      fg_color_sequence = rank.map { |piece| piece.nil? ? :white : piece.side }
-      rank = rank.map { |piece| piece.nil? ? " " : piece.to_s }
-
-      puts build_rank(bg_color_sequence, fg_color_sequence, rank)
-      bg_color_sequence.rotate!
-    end
+    render_each_rank
     puts "└#{'────────' * 8}┘"
+    puts " #{('a'..'h').map { |letter| letter.center(8) }.join}"
   end
 
   def at_position(position)
@@ -63,13 +55,25 @@ class Board
 
   private
 
-  def build_rank(bg_color_sequence, fg_color_sequence, rank_squares)
-    blank_line_squares = "        " * 8
-    blank_line_color_sequence = [:white] * 8
+  def render_each_rank
+    bg_color_sequence = %i[purple blue purple blue purple blue purple blue]
+
+    @board.each_with_index do |rank, index|
+      fg_color_sequence = rank.map { |piece| piece.nil? ? :white : piece.side }
+      rank = rank.map { |piece| piece.nil? ? " " : piece.to_s }
+
+      puts build_rank(bg_color_sequence, fg_color_sequence, rank, (8 - index))
+      bg_color_sequence.rotate!
+    end
+  end
+
+  def build_rank(bg_color_sequence, fg_color_sequence, rank_squares, rank_number)
+    blank_line = build_line(bg_color_sequence, [:white] * 8, "        " * 8)
+
     <<~RANK
-      │#{build_line(bg_color_sequence, blank_line_color_sequence, blank_line_squares)}│
-      │#{build_line(bg_color_sequence, fg_color_sequence, rank_squares)}│
-      │#{build_line(bg_color_sequence, blank_line_color_sequence, blank_line_squares)}│
+      │#{blank_line}│
+      │#{build_line(bg_color_sequence, fg_color_sequence, rank_squares)}│ #{rank_number}
+      │#{blank_line}│
     RANK
   end
 
