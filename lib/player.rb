@@ -12,6 +12,7 @@ class Player
   end
 
   def input
+    print "\n>> "
     gets.chomp
   end
 

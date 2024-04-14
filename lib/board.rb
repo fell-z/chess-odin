@@ -24,6 +24,7 @@ class Board
     render_each_rank
     puts "└#{'────────' * 8}┘"
     puts " #{('a'..'h').map { |letter| letter.center(8) }.join}"
+    puts
   end
 
   def at_position(position)
