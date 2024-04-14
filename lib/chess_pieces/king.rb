@@ -29,7 +29,7 @@ class King
 
   # rubocop:disable Metrics/MethodLength
   def castling(side)
-    return :failure unless castling?(side)
+    return FAILURE unless castling?(side)
 
     king_rank = @position[0]
     rook_file = side == :kingside ? 7 : 0
@@ -44,7 +44,7 @@ class King
     @position = new_positions[:king]
     @first_move = false
 
-    :success
+    SUCCESS
   end
   # rubocop:enable Metrics/MethodLength
 
@@ -70,7 +70,7 @@ class King
   def move(dest_pos)
     exit_code = super
 
-    @first_move = false if exit_code == :success && @first_move
+    @first_move = false if exit_code == SUCCESS && @first_move
 
     exit_code
   end
@@ -78,7 +78,7 @@ class King
   def capture(piece_pos)
     exit_code = super
 
-    @first_move = false if exit_code == :success && @first_move
+    @first_move = false if exit_code == SUCCESS && @first_move
 
     exit_code
   end

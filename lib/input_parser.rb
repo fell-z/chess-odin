@@ -2,6 +2,8 @@
 module InputParser
   module_function
 
+  FAILURE = false
+
   PIECES = {
     "K" => King,
     "N" => Knight,
@@ -43,8 +45,8 @@ module InputParser
     play[:dest_pos] = parse_dest_pos(input)[:data]
     play[:promotion_piece] = parse_promotion(input)[:data]
 
-    return :failure if play.any? { |_key, value| value == :failure }
-    return :failure if play[:piece] != Pawn && play[:promotion_piece]
+    return FAILURE if play.value?(FAILURE)
+    return FAILURE if play[:piece] != Pawn && play[:promotion_piece]
 
     play.delete(:promotion_piece) unless play[:piece] == Pawn
 
@@ -69,7 +71,7 @@ module InputParser
     matched_piece = input.match(/^[KNQBR]/)
     matched_invalid = input.match(/[^=][KNQBR]/)
 
-    return { data: :failure } if matched_invalid
+    return { data: FAILURE } if matched_invalid
     return { data: Pawn, index: 0 } unless matched_piece
 
     { data: PIECES[matched_piece[0]], index: matched_piece.begin(0) }
@@ -89,7 +91,7 @@ module InputParser
 
     { data: RANKS[origin_rank[0]], index: origin_rank.begin(0) }
   rescue NoMethodError
-    { data: :failure }
+    { data: FAILURE }
   end
 
   def parse_type(input)
@@ -106,7 +108,7 @@ module InputParser
 
     { data: [RANKS[input_rank], FILES[input_file]], index: matched_dest_pos.begin(0) }
   rescue NoMethodError
-    { data: :failure }
+    { data: FAILURE }
   end
 
   def parse_promotion(input)
@@ -119,7 +121,7 @@ module InputParser
       }
     end
 
-    return { data: :failure } if input.match(/=\w/)
+    return { data: FAILURE } if input.match(/=\w/)
 
     { data: nil }
   end

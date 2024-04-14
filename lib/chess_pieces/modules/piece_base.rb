@@ -11,6 +11,9 @@ module PieceBase
     down_right: [1, 1]
   }.freeze
 
+  FAILURE = false
+  SUCCESS = true
+
   attr_reader :side, :position
 
   def initialize(board, side, position)
@@ -22,22 +25,22 @@ module PieceBase
   end
 
   def move(dest_pos)
-    return :failure unless possible_moves.include?(dest_pos)
+    return FAILURE unless possible_moves.include?(dest_pos)
 
     @board.move_piece(@position, dest_pos)
     @position = dest_pos
 
-    :success
+    SUCCESS
   end
 
   def capture(piece_pos)
-    return :failure unless possible_captures.include?(piece_pos)
+    return FAILURE unless possible_captures.include?(piece_pos)
 
     @board.remove_piece_at(piece_pos)
 
     @board.move_piece(@position, piece_pos)
     @position = piece_pos
 
-    :success
+    SUCCESS
   end
 end

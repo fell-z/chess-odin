@@ -2,6 +2,8 @@ require_relative "./input_parser"
 
 # Implementation of a player, with methods to ask for a input(be a move or some decision) and etc.
 class Player
+  FAILURE = false
+
   attr_reader :side
 
   def initialize(board, side)
@@ -20,10 +22,10 @@ class Player
     return { piece: King }.merge(parsed_castling) if parsed_castling[:castling?]
 
     play = InputParser.parse_all_data(player_input)
-    return :failure if play == :failure
+    return FAILURE if play == FAILURE
 
     indexes = InputParser.parse_all_indexes(player_input)
-    return :failure unless indexes == indexes.sort
+    return FAILURE unless indexes == indexes.sort
 
     play
   end
